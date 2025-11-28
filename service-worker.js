@@ -1,308 +1,135 @@
-// APEX WWTP Pro - Service Worker
-// Version 1.0.0
+// Service Worker for WWTP PWA
+const CACHE_NAME = 'wwtp-pwa-v1.0.0';
+const RUNTIME_CACHE = 'wwtp-runtime-v1.0.0';
 
-const CACHE_NAME = 'apex-wwtp-v1.0.0';
-const STATIC_CACHE = 'apex-static-v1';
-const DYNAMIC_CACHE = 'apex-dynamic-v1';
-
-// Assets to cache immediately
-const STATIC_ASSETS = [
-  '/',
-  '/wwtp-pwa-enhanced.html',
-  '/manifest.json',
-  'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js'
+// Files to cache on installation
+const PRECACHE_URLS = [
+  '/wwtp-app/',
+  '/wwtp-app/index.html',
+  '/wwtp-app/WWTP-COMPLETE-PWA.html',
+  '/wwtp-app/wwtp-pwa-enhanced.html',
+  '/wwtp-app/offline.html',
+  '/wwtp-app/manifest.json',
+  '/wwtp-app/icons/icon-192x192.png',
+  '/wwtp-app/icons/icon-512x512.png'
 ];
 
-// Install event - cache static assets
-self.addEventListener('install', (event) => {
-  console.log('🔧 Service Worker: Installing...');
-  
+// Install event - cache core assets
+self.addEventListener('install', event => {
+  console.log('[Service Worker] Installing...');
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then((cache) => {
-        console.log('📦 Service Worker: Caching static assets');
-        return cache.addAll(STATIC_ASSETS.map(url => new Request(url, { cache: 'reload' })));
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        console.log('[Service Worker] Precaching app shell');
+        return cache.addAll(PRECACHE_URLS);
       })
-      .then(() => {
-        console.log('✅ Service Worker: Installation complete');
-        return self.skipWaiting();
-      })
-      .catch((error) => {
-        console.error('❌ Service Worker: Installation failed', error);
-      })
+      .then(() => self.skipWaiting())
   );
 });
 
 // Activate event - clean up old caches
-self.addEventListener('activate', (event) => {
-  console.log('⚡ Service Worker: Activating...');
-  
+self.addEventListener('activate', event => {
+  console.log('[Service Worker] Activating...');
   event.waitUntil(
-    caches.keys()
-      .then((cacheNames) => {
-        return Promise.all(
-          cacheNames
-            .filter((name) => {
-              return name !== STATIC_CACHE && name !== DYNAMIC_CACHE;
-            })
-            .map((name) => {
-              console.log(`🗑️ Service Worker: Deleting old cache: ${name}`);
-              return caches.delete(name);
-            })
-        );
-      })
-      .then(() => {
-        console.log('✅ Service Worker: Activation complete');
-        return self.clients.claim();
-      })
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames
+          .filter(cacheName => cacheName !== CACHE_NAME && cacheName !== RUNTIME_CACHE)
+          .map(cacheName => {
+            console.log('[Service Worker] Deleting old cache:', cacheName);
+            return caches.delete(cacheName);
+          })
+      );
+    }).then(() => self.clients.claim())
   );
 });
 
 // Fetch event - serve from cache, fallback to network
-self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
+self.addEventListener('fetch', event => {
+  // Skip cross-origin requests
+  if (!event.request.url.startsWith(self.location.origin)) {
     return;
   }
-  
-  // Skip chrome extension requests
-  if (request.url.startsWith('chrome-extension://')) {
+
+  // Handle navigation requests (HTML pages)
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => {
+          return caches.match('/wwtp-app/offline.html');
+        })
+    );
     return;
   }
-  
+
+  // Cache-first strategy for assets
   event.respondWith(
-    caches.match(request)
-      .then((cachedResponse) => {
-        // Return cached response if found
+    caches.match(event.request)
+      .then(cachedResponse => {
         if (cachedResponse) {
-          console.log(`📦 Serving from cache: ${request.url}`);
-          
-          // Update cache in background for next time
-          fetch(request)
-            .then((networkResponse) => {
-              if (networkResponse && networkResponse.status === 200) {
-                caches.open(DYNAMIC_CACHE)
-                  .then((cache) => {
-                    cache.put(request, networkResponse.clone());
-                  });
-              }
-            })
-            .catch(() => {
-              // Network failed, but we have cache
-            });
-          
           return cachedResponse;
         }
-        
-        // Not in cache, fetch from network
-        console.log(`🌐 Fetching from network: ${request.url}`);
-        return fetch(request)
-          .then((networkResponse) => {
-            // Check if valid response
-            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type === 'error') {
-              return networkResponse;
-            }
-            
-            // Clone response for cache
-            const responseToCache = networkResponse.clone();
-            
-            // Cache successful responses
-            caches.open(DYNAMIC_CACHE)
-              .then((cache) => {
-                cache.put(request, responseToCache);
-              });
-            
-            return networkResponse;
-          })
-          .catch((error) => {
-            console.error(`❌ Fetch failed for ${request.url}:`, error);
-            
-            // Return offline fallback page if available
-            return caches.match('/offline.html')
-              .then((offlineResponse) => {
-                if (offlineResponse) {
-                  return offlineResponse;
+
+        return caches.open(RUNTIME_CACHE)
+          .then(cache => {
+            return fetch(event.request)
+              .then(response => {
+                // Cache successful responses
+                if (response && response.status === 200) {
+                  cache.put(event.request, response.clone());
                 }
-                
-                // Return basic offline response
-                return new Response(
-                  `<!DOCTYPE html>
-                  <html>
-                  <head>
-                    <title>Offline - APEX WWTP</title>
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <style>
-                      body {
-                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        min-height: 100vh;
-                        margin: 0;
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        color: white;
-                        text-align: center;
-                        padding: 20px;
-                      }
-                      .container {
-                        background: rgba(255,255,255,0.1);
-                        padding: 40px;
-                        border-radius: 20px;
-                        backdrop-filter: blur(10px);
-                      }
-                      h1 { font-size: 3em; margin: 0 0 20px 0; }
-                      p { font-size: 1.2em; margin: 10px 0; }
-                      button {
-                        background: white;
-                        color: #667eea;
-                        border: none;
-                        padding: 15px 30px;
-                        border-radius: 10px;
-                        font-size: 1em;
-                        font-weight: bold;
-                        cursor: pointer;
-                        margin-top: 20px;
-                      }
-                      button:hover { opacity: 0.9; }
-                    </style>
-                  </head>
-                  <body>
-                    <div class="container">
-                      <h1>📵</h1>
-                      <h2>You're Offline</h2>
-                      <p>APEX WWTP requires an internet connection for this feature.</p>
-                      <p>Cached data is still available for viewing.</p>
-                      <button onclick="location.reload()">Try Again</button>
-                    </div>
-                  </body>
-                  </html>`,
-                  {
-                    status: 200,
-                    statusText: 'OK',
-                    headers: new Headers({
-                      'Content-Type': 'text/html'
-                    })
-                  }
-                );
+                return response;
               });
           });
+      })
+      .catch(() => {
+        // Return offline page for failed navigation
+        if (event.request.mode === 'navigate') {
+          return caches.match('/wwtp-app/offline.html');
+        }
       })
   );
 });
 
-// Background sync event
-self.addEventListener('sync', (event) => {
-  console.log('🔄 Service Worker: Background sync triggered');
-  
+// Handle messages from the main app
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+// Background sync for data submission (when online)
+self.addEventListener('sync', event => {
   if (event.tag === 'sync-data') {
     event.waitUntil(syncData());
   }
 });
 
-// Sync data function
 async function syncData() {
-  console.log('📤 Service Worker: Syncing data...');
-  
-  try {
-    // Get pending data from IndexedDB or localStorage
-    // This is where you'd implement actual sync logic
-    
-    // Simulate sync
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    console.log('✅ Service Worker: Data synced successfully');
-    
-    // Notify all clients
-    const clients = await self.clients.matchAll();
-    clients.forEach(client => {
-      client.postMessage({
-        type: 'SYNC_COMPLETE',
-        message: 'Data synced successfully'
-      });
-    });
-    
-  } catch (error) {
-    console.error('❌ Service Worker: Sync failed', error);
-    throw error;
-  }
+  console.log('[Service Worker] Syncing data...');
+  // Add your data sync logic here
 }
 
-// Push notification event
-self.addEventListener('push', (event) => {
-  console.log('📬 Service Worker: Push notification received');
-  
+// Push notification support
+self.addEventListener('push', event => {
   const options = {
     body: event.data ? event.data.text() : 'New update available',
-    icon: '/icon-192x192.png',
-    badge: '/badge-72x72.png',
+    icon: '/wwtp-app/icons/icon-192x192.png',
+    badge: '/wwtp-app/icons/icon-72x72.png',
     vibrate: [200, 100, 200],
-    tag: 'apex-notification',
-    requireInteraction: false,
-    actions: [
-      { action: 'open', title: 'Open App' },
-      { action: 'close', title: 'Close' }
-    ]
+    tag: 'wwtp-notification',
+    requireInteraction: false
   };
-  
+
   event.waitUntil(
-    self.registration.showNotification('APEX WWTP', options)
+    self.registration.showNotification('WWTP Alert', options)
   );
 });
 
-// Notification click event
-self.addEventListener('notificationclick', (event) => {
-  console.log('🔔 Service Worker: Notification clicked');
-  
+// Notification click handler
+self.addEventListener('notificationclick', event => {
   event.notification.close();
-  
-  if (event.action === 'open') {
-    event.waitUntil(
-      clients.openWindow('/')
-    );
-  }
+  event.waitUntil(
+    clients.openWindow('/wwtp-app/')
+  );
 });
-
-// Message event - handle messages from clients
-self.addEventListener('message', (event) => {
-  console.log('💬 Service Worker: Message received', event.data);
-  
-  if (event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
-  
-  if (event.data.type === 'CACHE_URLS') {
-    event.waitUntil(
-      caches.open(DYNAMIC_CACHE)
-        .then((cache) => {
-          return cache.addAll(event.data.urls);
-        })
-    );
-  }
-  
-  if (event.data.type === 'CLEAR_CACHE') {
-    event.waitUntil(
-      caches.keys()
-        .then((cacheNames) => {
-          return Promise.all(
-            cacheNames.map((name) => caches.delete(name))
-          );
-        })
-        .then(() => {
-          console.log('🗑️ Service Worker: All caches cleared');
-        })
-    );
-  }
-});
-
-// Periodic background sync (if supported)
-self.addEventListener('periodicsync', (event) => {
-  console.log('🔄 Service Worker: Periodic sync triggered');
-  
-  if (event.tag === 'data-sync') {
-    event.waitUntil(syncData());
-  }
-});
-
-console.log('🚀 APEX WWTP Service Worker loaded');
