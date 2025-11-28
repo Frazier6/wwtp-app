@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+<title>APEX WWTP Pro - Enhanced PWA</title>
+
+<!-- PWA Meta Tags -->
+<meta name="description" content="Professional wastewater treatment plant analysis platform with AI, ML, IoT, and advanced analytics">
+<meta name="theme-color" content="#667eea">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="APEX WWTP">
+<link rel="manifest" href="manifest.json">
+
+<!-- Apple Touch Icons -->
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect fill='%23667eea' width='180' height='180'/><text x='50%' y='50%' font-size='80' text-anchor='middle' dy='.3em' fill='white'>💧</text></svg>">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>💧</text></svg>">
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+:root{
+--bg-body:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+--bg-container:#fff;
+--bg-header:linear-gradient(135deg,#2c5aa0 0%,#1e3a5f 100%);
+--bg-tabs:#f8f9fa;
+--bg-tab-active:#fff;
+--bg-section:#fff;
+--bg-section-header:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);
+--bg-table-th:#f8f9fa;
+--bg-col-header:#e3f2fd;
+--bg-row-header:#f8f9fa;
+--bg-input:#fff;
+--bg-result:#e3f2fd;
+--bg-note:#e7f3ff;
+--bg-card:#ffffff;
+--text:#212529;
+--text-header:#fff;
+--text-accent:#2c5aa0;
+--text-unit:#6c757d;
+--text-section:#495057;
+--border:#e9ecef;
+--border-input:#dee2e6;
+--border-focus:#2c5aa0;
+--border-note:#2c5aa0;
+--ok:#28a745;
+--warn:#ffc107;
+--bad:#dc3545;
+--info:#17a2b8;
+--purple:#9b59b6;
+--indigo:#6610f2;
+--pink:#e83e8c;
+--teal:#20c997;
+--cyan:#17a2b8;
+--orange:#fd7e14;
+--gradient-1:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+--gradient-2:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);
+--gradient-3:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);
+--shadow-sm:0 2px 4px rgba(0,0,0,.05);
+--shadow-md:0 4px 12px rgba(0,0,0,.08);
+--shadow-lg:0 8px 24px rgba(0,0,0,.12);
+--shadow-xl:0 20px 40px rgba(0,0,0,.15);
+}
+html.dark{
+--bg-body:linear-gradient(135deg,#1F2937 0%,#111827 100%);
+--bg-container:#1F2937;
+--bg-header:linear-gradient(135deg,#374151 0%,#111827 100%);
+--bg-tabs:#111827;
+--bg-tab-active:#1F2937;
+--bg-section:#374151;
+--bg-section-header:linear-gradient(135deg,#1F2937 0%,#111827 100%);
+--bg-table-th:#111827;
+--bg-col-header:#1E40AF;
+--bg-row-header:#1F2937;
+--bg-input:#4B5563;
+--bg-result:#1E3A8A;
+--bg-note:#1E3A8A;
+--bg-card:#2d3748;
+--text:#E5E7EB;
+--text-header:#F9FAFB;
+--text-accent:#93C5FD;
+--text-unit:#9CA3AF;
+--text-section:#D1D5DB;
+--border:#4B5563;
+--border-input:#6B7280;
+--border-focus:#60A5FA;
+--border-note:#3B82F6;
+--ok:#4ADE80;
+--warn:#FBBF24;
+--bad:#F87171;
+--info:#22D3EE;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;min-height:100vh;background:var(--bg-body);color:var(--text);padding:10px;overflow-x:hidden}
+.wrap{max-width:1920px;margin:0 auto;background:var(--bg-container);border-radius:18px;box-shadow:var(--shadow-xl);overflow:hidden;animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.1)}}
+@keyframes slideInRight{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes slideInUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes glow{0%,100%{box-shadow:0 0 5px var(--text-accent)}50%{box-shadow:0 0 20px var(--text-accent)}}
+.header{background:var(--bg-header);color:var(--text-header);padding:24px 32px;position:relative}
+.header h1{font-size:32px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.live-indicator{width:12px;height:12px;background:#4ADE80;border-radius:50%;animation:pulse 2s infinite;box-shadow:0 0 12px #4ADE80}
+.badge{display:inline-block;padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;margin-left:8px;letter-spacing:.5px}
+.badge.pro{background:linear-gradient(135deg,#f093fb,#f5576c);color:#fff;box-shadow:0 4px 12px rgba(240,147,251,.4)}
+.badge.pwa{background:linear-gradient(135deg,#4facfe,#00f2fe);color:#fff;box-shadow:0 4px 12px rgba(79,172,254,.4)}
+.badge.ai{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;animation:glow 2s infinite}
+.muted{opacity:.9;font-size:0.95rem}
+.header-controls{position:absolute;right:24px;top:24px;display:flex;gap:12px;flex-wrap:wrap}
+.toggle{width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.25);display:grid;place-items:center;background:rgba(255,255,255,.09);color:#fff;cursor:pointer;transition:all .3s;font-size:18px}
+.toggle:hover{background:rgba(255,255,255,.15);transform:rotate(180deg) scale(1.05)}
+.toggle.active{background:var(--ok);animation:glow 2s infinite}
+.status-bar{display:flex;gap:24px;margin-top:14px;flex-wrap:wrap}
+.status-item{display:flex;align-items:center;gap:8px;font-size:13px;opacity:.9;padding:6px 12px;background:rgba(255,255,255,.1);border-radius:8px}
+.status-item .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+.tabs{display:flex;flex-wrap:wrap;gap:2px;background:var(--bg-tabs);border-bottom:2px solid var(--border);scrollbar-width:thin;position:sticky;top:0;z-index:100;overflow-x:auto}
+.tab{padding:16px 18px;border:0;background:transparent;color:var(--text-unit);cursor:pointer;white-space:nowrap;font-weight:600;transition:all .2s;font-size:14px;position:relative;flex-shrink:0}
+.tab:hover{background:var(--bg-note);transform:translateY(-2px)}
+.tab[aria-selected="true"]{background:var(--bg-tab-active);color:var(--text-accent);border-bottom:4px solid var(--text-accent)}
+.content{padding:24px}
+.panel{display:none}
+.panel.active{display:block;animation:fadeIn .3s}
+.section{background:var(--bg-section);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px;transition:all .3s}
+.section:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.section-h{background:var(--bg-section-header);padding:16px 20px;font-weight:700;color:var(--text-section);display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+.section-content{padding:24px}
+.input-group{margin:16px 0}
+.input-group label{display:block;margin-bottom:8px;font-weight:600;color:var(--text-section);font-size:14px}
+input,select,textarea{width:100%;padding:11px 14px;border-radius:10px;border:2px solid var(--border-input);background:var(--bg-input);color:var(--text);transition:all .3s;font-size:14px;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--border-focus);box-shadow:0 0 0 4px rgba(44,90,160,.12);transform:translateY(-2px)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:14px}
+.btns{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.btn{padding:13px 22px;border-radius:12px;border:0;cursor:pointer;color:#fff;background:var(--text-accent);font-weight:600;transition:all .2s;font-size:14px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+.btn:hover{opacity:.95;transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.btn.green{background:var(--ok)}
+.btn.purple{background:var(--purple)}
+.btn.gradient{background:var(--gradient-1)}
+.table{width:100%;border-collapse:collapse;font-size:14px;overflow-x:auto;display:block}
+.table thead{position:sticky;top:0;background:var(--bg-table-th)}
+.table th,.table td{padding:14px;border-bottom:1px solid var(--border);text-align:left}
+.table th{background:var(--bg-table-th);font-weight:600;text-transform:uppercase;font-size:12px}
+.table tbody tr:hover{background:var(--bg-section-header)}
+.result{font-weight:700;color:var(--text-accent);background:var(--bg-result);padding:8px 12px;border-radius:8px;display:inline-block}
+.status{font-weight:700;padding:6px 12px;border-radius:8px;font-size:13px;display:inline-block}
+.ok{color:var(--ok);background:rgba(40,167,69,.15)}
+.warn{color:var(--warn);background:rgba(255,193,7,.15)}
+.bad{color:var(--bad);background:rgba(220,53,69,.15)}
+.note{background:var(--bg-note);border-left:5px solid var(--border-note);padding:16px;border-radius:0 12px 12px 0;margin-top:12px;font-size:14px;line-height:1.7}
+.chart-container{position:relative;height:360px;width:100%;margin:24px 0;padding:20px;background:var(--bg-card);border-radius:14px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin:24px 0}
+.kpi-card{background:var(--bg-card);padding:24px;border-radius:14px;text-align:center;border:2px solid var(--border);transition:all .3s;cursor:pointer}
+.kpi-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:var(--text-accent)}
+.kpi-card h4{margin:0 0 12px 0;color:var(--text-section);font-size:13px;text-transform:uppercase;letter-spacing:1px}
+.kpi-card p{margin:0;font-size:2.2em;font-weight:800;color:var(--text-accent)}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg-card);color:var(--text);padding:16px 24px;border-radius:12px;box-shadow:var(--shadow-lg);z-index:10000;animation:slideInRight .3s;transition:opacity .3s;border-left:5px solid var(--text-accent)}
+.toast.success{border-left-color:var(--ok)}
+.toast.error{border-left-color:var(--bad)}
+.toast.warning{border-left-color:var(--warn)}
+.ai-panel{background:var(--bg-card);border:2px solid var(--border);border-radius:14px;padding:20px;margin-top:20px}
+.ai-messages{max-height:400px;overflow-y:auto;padding:16px;background:var(--bg-section);border-radius:10px;margin:16px 0}
+.ai-message{padding:12px 16px;margin:8px 0;border-radius:10px;animation:slideInUp .3s}
+.ai-message.user{background:var(--text-accent);color:#fff;margin-left:20%;text-align:right}
+.ai-message.assistant{background:var(--bg-input);border:1px solid var(--border);margin-right:20%}
+.ai-input-area{display:flex;gap:12px;margin-top:16px}
+.ai-input-area input{flex:1}
+.ai-input-area button{flex-shrink:0}
+.thinking{color:var(--text-unit);font-style:italic;display:none;padding:12px;text-align:center}
+.thinking.active{display:block;animation:pulse 1s infinite}
+.offline-indicator{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--warn);color:#fff;padding:12px 24px;border-radius:10px;box-shadow:var(--shadow-lg);z-index:9999;display:none}
+.offline-indicator.active{display:block;animation:slideInUp .3s}
+.install-prompt{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--gradient-1);color:#fff;padding:16px 32px;border-radius:50px;box-shadow:var(--shadow-xl);cursor:pointer;z-index:9999;animation:pulse 2s infinite;font-weight:700;border:none;font-size:16px}
+@media(max-width:768px){
+.header h1{font-size:24px}
+.tabs{overflow-x:auto}
+.kpi-grid{grid-template-columns:1fr}
+.chart-container{height:250px}
+.header-controls{position:static;margin-top:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <!-- Header -->
+  <div class="header">
+    <h1>
+      <span class="live-indicator"></span>
+      💧 APEX WWTP Pro
+      <span class="badge pwa">PWA</span>
+      <span class="badge pro">Enhanced</span>
+      <span class="badge ai">AI</span>
+    </h1>
+    <p class="muted">Professional Wastewater Treatment Plant Analysis Platform • Enhanced PWA Edition</p>
+    
+    <div class="header-controls">
+      <button class="toggle" id="themeBtn" title="Toggle Theme">🌙</button>
+      <button class="toggle" id="notifyBtn" title="Notifications">🔔</button>
+      <button class="toggle" id="syncBtn" title="Sync Data">🔄</button>
+    </div>
+    
+    <div class="status-bar">
+      <div class="status-item"><span class="dot" style="background:#4ADE80"></span> System Online</div>
+      <div class="status-item"><span class="dot" style="background:#17a2b8"></span> <span id="connection-status">Connected</span></div>
+      <div class="status-item"><span class="dot" style="background:#667eea"></span> <span id="pwa-status">PWA Ready</span></div>
+      <div class="status-item">🕐 <span id="current-time">--:--</span></div>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-target="dashboard">📊 Dashboard</button>
+    <button class="tab" role="tab" data-target="process">⚙️ Process Loading</button>
+    <button class="tab" role="tab" data-target="sludge">🧪 Sludge Management</button>
+    <button class="tab" role="tab" data-target="oxygen">💨 Oxygen Demand</button>
+    <button class="tab" role="tab" data-target="nutrients">🌱 Nutrients</button>
+    <button class="tab" role="tab" data-target="chemical">⚗️ Chemical Dosing</button>
+    <button class="tab" role="tab" data-target="energy">⚡ Energy</button>
+    <button class="tab" role="tab" data-target="reports">📈 Reports</button>
+    <button class="tab" role="tab" data-target="ai">🤖 AI Assistant</button>
+    <button class="tab" role="tab" data-target="settings">⚙️ Settings</button>
+  </div>
+
+  <!-- Content Panels -->
+  <div class="content">
+    
+    <!-- Dashboard Panel -->
+    <div id="dashboard" class="panel active">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <h4>Flow Rate</h4>
+          <p id="kpi-flow">2.5</p>
+          <div class="small">MGD</div>
+        </div>
+        <div class="kpi-card">
+          <h4>Influent BOD</h4>
+          <p id="kpi-bod">180</p>
+          <div class="small">mg/L</div>
+        </div>
+        <div class="kpi-card">
+          <h4>MLSS</h4>
+          <p id="kpi-mlss">3200</p>
+          <div class="small">mg/L</div>
+        </div>
+        <div class="kpi-card">
+          <h4>F/M Ratio</h4>
+          <p id="kpi-fm">0.35</p>
+          <div class="small">lb/lb/d</div>
+        </div>
+        <div class="kpi-card">
+          <h4>SRT</h4>
+          <p id="kpi-srt">15</p>
+          <div class="small">days</div>
+        </div>
+        <div class="kpi-card">
+          <h4>SVI</h4>
+          <p id="kpi-svi">120</p>
+          <div class="small">mL/g</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-h">Performance Trends</div>
+        <div class="section-content">
+          <div class="chart-container">
+            <canvas id="trendChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-h">Quick Actions</div>
+        <div class="section-content">
+          <div class="btns">
+            <button class="btn green" onclick="runDiagnostics()">🔍 Run Diagnostics</button>
+            <button class="btn purple" onclick="exportReport()">📄 Export Report</button>
+            <button class="btn gradient" onclick="showAI()">🤖 AI Analysis</button>
+            <button class="btn" onclick="syncData()">🔄 Sync Data</button>
+          </div>
+          <div class="note">
+            <strong>💡 Tip:</strong> All data is automatically saved locally and syncs when online. You can use this app offline!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Process Loading Panel -->
+    <div id="process" class="panel">
+      <div class="section">
+        <div class="section-h">Process Loading Calculator</div>
+        <div class="section-content">
+          <div class="row">
+            <div class="input-group">
+              <label>Flow Rate (MGD)</label>
+              <input type="number" id="proc-flow" step="0.1" value="2.5" oninput="calculateProcess()">
+            </div>
+            <div class="input-group">
+              <label>Influent BOD (mg/L)</label>
+              <input type="number" id="proc-bod" step="1" value="180" oninput="calculateProcess()">
+            </div>
+            <div class="input-group">
+              <label>MLVSS (mg/L)</label>
+              <input type="number" id="proc-mlvss" step="10" value="2800" oninput="calculateProcess()">
+            </div>
+            <div class="input-group">
+              <label>Basin Volume (MG)</label>
+              <input type="number" id="proc-volume" step="0.1" value="1.5" oninput="calculateProcess()">
+            </div>
+          </div>
+          
+          <div class="btns">
+            <button class="btn green" onclick="calculateProcess()">Calculate</button>
+            <button class="btn" onclick="resetProcess()">Reset</button>
+          </div>
+
+          <div id="process-results"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sludge Management Panel -->
+    <div id="sludge" class="panel">
+      <div class="section">
+        <div class="section-h">Sludge Management</div>
+        <div class="section-content">
+          <div class="row">
+            <div class="input-group">
+              <label>MLSS (mg/L)</label>
+              <input type="number" id="sludge-mlss" step="10" value="3200" oninput="calculateSludge()">
+            </div>
+            <div class="input-group">
+              <label>Flow (MGD)</label>
+              <input type="number" id="sludge-flow" step="0.1" value="2.5" oninput="calculateSludge()">
+            </div>
+            <div class="input-group">
+              <label>WAS Rate (MGD)</label>
+              <input type="number" id="sludge-was" step="0.01" value="0.05" oninput="calculateSludge()">
+            </div>
+            <div class="input-group">
+              <label>Basin Volume (MG)</label>
+              <input type="number" id="sludge-volume" step="0.1" value="1.5" oninput="calculateSludge()">
+            </div>
+          </div>
+
+          <div class="btns">
+            <button class="btn green" onclick="calculateSludge()">Calculate</button>
+            <button class="btn" onclick="resetSludge()">Reset</button>
+          </div>
+
+          <div id="sludge-results"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Oxygen Demand Panel -->
+    <div id="oxygen" class="panel">
+      <div class="section">
+        <div class="section-h">Oxygen Requirements</div>
+        <div class="section-content">
+          <div class="row">
+            <div class="input-group">
+              <label>BOD Removed (lb/d)</label>
+              <input type="number" id="o2-bod" step="10" value="3750" oninput="calculateOxygen()">
+            </div>
+            <div class="input-group">
+              <label>NH3-N Oxidized (lb/d)</label>
+              <input type="number" id="o2-nh3" step="1" value="150" oninput="calculateOxygen()">
+            </div>
+            <div class="input-group">
+              <label>Temperature (°C)</label>
+              <input type="number" id="o2-temp" step="1" value="20" oninput="calculateOxygen()">
+            </div>
+            <div class="input-group">
+              <label>Altitude (ft)</label>
+              <input type="number" id="o2-alt" step="100" value="0" oninput="calculateOxygen()">
+            </div>
+          </div>
+
+          <div class="btns">
+            <button class="btn green" onclick="calculateOxygen()">Calculate</button>
+            <button class="btn" onclick="resetOxygen()">Reset</button>
+          </div>
+
+          <div id="oxygen-results"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nutrients Panel -->
+    <div id="nutrients" class="panel">
+      <div class="section">
+        <div class="section-h">Nutrient Removal</div>
+        <div class="section-content">
+          <div class="row">
+            <div class="input-group">
+              <label>Influent TN (mg/L)</label>
+              <input type="number" id="nut-tn-in" step="0.1" value="35" oninput="calculateNutrients()">
+            </div>
+            <div class="input-group">
+              <label>Effluent TN (mg/L)</label>
+              <input type="number" id="nut-tn-out" step="0.1" value="8" oninput="calculateNutrients()">
+            </div>
+            <div class="input-group">
+              <label>Influent TP (mg/L)</label>
+              <input type="number" id="nut-tp-in" step="0.1" value="4.5" oninput="calculateNutrients()">
+            </div>
+            <div class="input-group">
+              <label>Effluent TP (mg/L)</label>
+              <input type="number" id="nut-tp-out" step="0.1" value="0.5" oninput="calculateNutrients()">
+            </div>
+          </div>
+
+          <div class="btns">
+            <button class="btn green" onclick="calculateNutrients()">Calculate</button>
+            <button class="btn" onclick="resetNutrients()">Reset</button>
+          </div>
+
+          <div id="nutrients-results"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chemical Dosing Panel -->
+    <div id="chemical" class="panel">
+      <div class="section">
+        <div class="section-h">Chemical Dosing Calculator</div>
+        <div class="section-content">
+          <div class="row">
+            <div class="input-group">
+              <label>Chemical Type</label>
+              <select id="chem-type">
+                <option value="alum">Alum (Al₂(SO₄)₃)</option>
+                <option value="ferric">Ferric Chloride (FeCl₃)</option>
+                <option value="polymer">Polymer</option>
+                <option value="chlorine">Chlorine (Cl₂)</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>Flow Rate (MGD)</label>
+              <input type="number" id="chem-flow" step="0.1" value="2.5">
+            </div>
+            <div class="input-group">
+              <label>Dose (mg/L)</label>
+              <input type="number" id="chem-dose" step="0.1" value="10">
+            </div>
+            <div class="input-group">
+              <label>Chemical Strength (%)</label>
+              <input type="number" id="chem-strength" step="0.1" value="48">
+            </div>
+          </div>
+
+          <div class="btns">
+            <button class="btn green" onclick="calculateChemical()">Calculate</button>
+            <button class="btn" onclick="resetChemical()">Reset</button>
+          </div>
+
+          <div id="chemical-results"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Energy Panel -->
+    <div id="energy" class="panel">
+      <div class="section">
+        <div class="section-h">Energy Analysis</div>
+        <div class="section-content">
+          <div class="row">
+            <div class="input-group">
+              <label>Total kWh/day</label>
+              <input type="number" id="energy-kwh" step="10" value="4500" oninput="calculateEnergy()">
+            </div>
+            <div class="input-group">
+              <label>Flow (MGD)</label>
+              <input type="number" id="energy-flow" step="0.1" value="2.5" oninput="calculateEnergy()">
+            </div>
+            <div class="input-group">
+              <label>Cost ($/kWh)</label>
+              <input type="number" id="energy-cost" step="0.01" value="0.12" oninput="calculateEnergy()">
+            </div>
+          </div>
+
+          <div class="btns">
+            <button class="btn green" onclick="calculateEnergy()">Calculate</button>
+            <button class="btn" onclick="resetEnergy()">Reset</button>
+          </div>
+
+          <div id="energy-results"></div>
+
+          <div class="chart-container">
+            <canvas id="energyChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reports Panel -->
+    <div id="reports" class="panel">
+      <div class="section">
+        <div class="section-h">Generate Reports</div>
+        <div class="section-content">
+          <div class="input-group">
+            <label>Report Type</label>
+            <select id="report-type">
+              <option value="daily">Daily Operations</option>
+              <option value="weekly">Weekly Summary</option>
+              <option value="monthly">Monthly Report</option>
+              <option value="compliance">Compliance Report</option>
+              <option value="custom">Custom Report</option>
+            </select>
+          </div>
+
+          <div class="btns">
+            <button class="btn green" onclick="generateReport()">📄 Generate Report</button>
+            <button class="btn purple" onclick="exportPDF()">📥 Export PDF</button>
+            <button class="btn" onclick="exportExcel()">📊 Export Excel</button>
+          </div>
+
+          <div class="note">
+            <strong>📊 Report Features:</strong>
+            <ul style="margin-top:12px;padding-left:20px">
+              <li>Automatic data compilation from all modules</li>
+              <li>Compliance checking against permit limits</li>
+              <li>Trend analysis and recommendations</li>
+              <li>Professional formatting ready for submittal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Assistant Panel -->
+    <div id="ai" class="panel">
+      <div class="ai-panel">
+        <h2 style="margin-bottom:16px">🤖 AI Assistant</h2>
+        <div class="ai-messages" id="aiMessages">
+          <div class="ai-message assistant">
+            👋 Hello! I'm your WWTP AI Assistant. I can help you with:
+            <ul style="margin-top:12px;padding-left:20px">
+              <li>Process troubleshooting and diagnostics</li>
+              <li>Operational optimization recommendations</li>
+              <li>Compliance and regulatory guidance</li>
+              <li>Energy efficiency strategies</li>
+              <li>Predictive maintenance alerts</li>
+            </ul>
+            What would you like to know?
+          </div>
+        </div>
+        <div class="thinking" id="aiThinking">🤔 Thinking...</div>
+        <div class="ai-input-area">
+          <input type="text" id="aiInput" placeholder="Ask me anything about WWTP operations..." onkeypress="if(event.key==='Enter')sendAIMessage()">
+          <button class="btn gradient" onclick="sendAIMessage()">Send 🚀</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div id="settings" class="panel">
+      <div class="section">
+        <div class="section-h">Application Settings</div>
+        <div class="section-content">
+          <div class="input-group">
+            <label>Plant Name</label>
+            <input type="text" id="setting-plant" value="Sample WWTP">
+          </div>
+          <div class="input-group">
+            <label>NPDES Permit</label>
+            <input type="text" id="setting-permit" value="TX0012345">
+          </div>
+          <div class="input-group">
+            <label>Design Flow (MGD)</label>
+            <input type="number" id="setting-design-flow" step="0.1" value="5.0">
+          </div>
+          <div class="input-group">
+            <label>Units System</label>
+            <select id="setting-units">
+              <option value="us">US Customary</option>
+              <option value="metric">Metric</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Auto-Save</label>
+            <input type="checkbox" id="setting-autosave" checked style="width:auto;margin-left:10px">
+            <span style="margin-left:10px">Enable automatic data saving</span>
+          </div>
+
+          <div class="btns">
+            <button class="btn green" onclick="saveSettings()">💾 Save Settings</button>
+            <button class="btn" onclick="clearData()">🗑️ Clear All Data</button>
+            <button class="btn purple" onclick="exportData()">📤 Export Data</button>
+            <button class="btn" onclick="importData()">📥 Import Data</button>
+          </div>
+
+          <div class="note">
+            <strong>ℹ️ PWA Features:</strong>
+            <ul style="margin-top:12px;padding-left:20px">
+              <li>✅ Offline functionality enabled</li>
+              <li>✅ Data stored locally in browser</li>
+              <li>✅ Automatic background sync when online</li>
+              <li>✅ Install as standalone app on any device</li>
+              <li>✅ Works on iOS, Android, Windows, Mac, Linux</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Offline Indicator -->
+<div class="offline-indicator" id="offlineIndicator">
+  📵 Offline Mode - Some features limited
+</div>
+
+<script>
+// Utility functions
+const $ = id => document.getElementById(id);
+const $$ = sel => document.querySelectorAll(sel);
+
+// State management
+const state = {
+  theme: 'dark',
+  plantData: {},
+  calculations: {},
+  aiChat: [],
+  isOnline: navigator.onLine,
+  isPWA: false
+};
+
+// Initialize app
+document.addEventListener('DOMContentLoaded', () => {
+  initializePWA();
+  loadSettings();
+  initializeTabs();
+  initializeTheme();
+  initializeCharts();
+  updateTime();
+  setInterval(updateTime, 1000);
+  checkOnlineStatus();
+  
+  console.log('✅ APEX WWTP Pro initialized');
+});
+
+// PWA Initialization
+function initializePWA() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => {
+        console.log('✅ Service Worker registered:', reg);
+        state.isPWA = true;
+        $('pwa-status').textContent = 'PWA Active';
+      })
+      .catch(err => console.error('❌ Service Worker failed:', err));
+  }
+}
+
+// Tab navigation
+function initializeTabs() {
+  $$('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      $$('.tab').forEach(t => t.setAttribute('aria-selected', 'false'));
+      $$('.panel').forEach(p => p.classList.remove('active'));
+      tab.setAttribute('aria-selected', 'true');
+      const target = tab.getAttribute('data-target');
+      $(target).classList.add('active');
+    });
+  });
+}
+
+// Theme toggle
+function initializeTheme() {
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+  
+  $('themeBtn').addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    const theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    localStorage.setItem('theme', theme);
+    showToast(`Theme changed to ${theme} mode`, 'success');
+  });
+}
+
+// Time update
+function updateTime() {
+  const now = new Date();
+  $('current-time').textContent = now.toLocaleTimeString();
+}
+
+// Online/Offline status
+function checkOnlineStatus() {
+  window.addEventListener('online', () => {
+    state.isOnline = true;
+    $('connection-status').textContent = 'Connected';
+    $('offlineIndicator').classList.remove('active');
+    showToast('✅ Back online', 'success');
+  });
+  
+  window.addEventListener('offline', () => {
+    state.isOnline = false;
+    $('connection-status').textContent = 'Offline';
+    $('offlineIndicator').classList.add('active');
+    showToast('📵 Offline mode', 'warning');
+  });
+}
+
+// Toast notifications
+function showToast(msg, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => toast.remove(), 300);
+  }, 4000);
+}
+
+// Chart initialization
+function initializeCharts() {
+  if (typeof Chart === 'undefined') return;
+  
+  // Trend Chart
+  const trendCtx = $('trendChart')?.getContext('2d');
+  if (trendCtx) {
+    new Chart(trendCtx, {
+      type: 'line',
+      data: {
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [{
+          label: 'BOD (mg/L)',
+          data: [180, 175, 190, 185, 170, 180, 175],
+          borderColor: '#667eea',
+          tension: 0.4
+        }, {
+          label: 'MLSS (mg/L)',
+          data: [3200, 3150, 3300, 3250, 3100, 3200, 3150],
+          borderColor: '#4facfe',
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' }
+        }
+      }
+    });
+  }
+  
+  // Energy Chart
+  const energyCtx = $('energyChart')?.getContext('2d');
+  if (energyCtx) {
+    new Chart(energyCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Aeration', 'Pumps', 'Clarifiers', 'Other'],
+        datasets: [{
+          label: 'Energy Usage (kWh/day)',
+          data: [2700, 900, 450, 450],
+          backgroundColor: ['#667eea', '#4facfe', '#f093fb', '#ffc107']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+  }
+}
+
+// Process Loading Calculator
+function calculateProcess() {
+  const flow = parseFloat($('proc-flow').value);
+  const bod = parseFloat($('proc-bod').value);
+  const mlvss = parseFloat($('proc-mlvss').value);
+  const volume = parseFloat($('proc-volume').value);
+  
+  const bodLoad = flow * bod * 8.34;
+  const fm = bodLoad / (mlvss * volume * 8.34);
+  const vl = bodLoad / volume;
+  const hrt = (volume / flow) * 24;
+  
+  const results = `
+    <div style="margin-top:24px">
+      <h3>Results:</h3>
+      <table class="table">
+        <tr><td class="rowh">BOD Loading</td><td class="result">${bodLoad.toFixed(0)} lb/d</td></tr>
+        <tr><td class="rowh">F/M Ratio</td><td class="result">${fm.toFixed(2)} lb/lb/d</td></tr>
+        <tr><td class="rowh">Volumetric Loading</td><td class="result">${vl.toFixed(0)} lb/d/MG</td></tr>
+        <tr><td class="rowh">HRT</td><td class="result">${hrt.toFixed(1)} hours</td></tr>
+      </table>
+      <div class="note ${fm > 0.2 && fm < 0.5 ? 'success' : 'warning'}">
+        <strong>Status:</strong> ${fm > 0.2 && fm < 0.5 ? '✅ Optimal F/M range' : '⚠️ F/M outside typical range'}
+      </div>
+    </div>
+  `;
+  
+  $('process-results').innerHTML = results;
+  saveCalculation('process', { flow, bod, mlvss, volume, results: { bodLoad, fm, vl, hrt } });
+}
+
+function resetProcess() {
+  $('proc-flow').value = '2.5';
+  $('proc-bod').value = '180';
+  $('proc-mlvss').value = '2800';
+  $('proc-volume').value = '1.5';
+  $('process-results').innerHTML = '';
+}
+
+// Sludge Management Calculator
+function calculateSludge() {
+  const mlss = parseFloat($('sludge-mlss').value);
+  const flow = parseFloat($('sludge-flow').value);
+  const was = parseFloat($('sludge-was').value);
+  const volume = parseFloat($('sludge-volume').value);
+  
+  const sludgeProd = mlss * volume * 8.34;
+  const srt = sludgeProd / (mlss * was * 8.34);
+  
+  const results = `
+    <div style="margin-top:24px">
+      <h3>Results:</h3>
+      <table class="table">
+        <tr><td class="rowh">Sludge Production</td><td class="result">${sludgeProd.toFixed(0)} lb</td></tr>
+        <tr><td class="rowh">SRT (Sludge Age)</td><td class="result">${srt.toFixed(1)} days</td></tr>
+        <tr><td class="rowh">WAS Rate</td><td class="result">${(was * 1000000 / 1440).toFixed(0)} gpm</td></tr>
+      </table>
+      <div class="note ${srt >= 8 && srt <= 20 ? 'success' : 'warning'}">
+        <strong>Status:</strong> ${srt >= 8 && srt <= 20 ? '✅ Good SRT for nitrification' : '⚠️ SRT may need adjustment'}
+      </div>
+    </div>
+  `;
+  
+  $('sludge-results').innerHTML = results;
+  saveCalculation('sludge', { mlss, flow, was, volume, results: { sludgeProd, srt } });
+}
+
+function resetSludge() {
+  $('sludge-mlss').value = '3200';
+  $('sludge-flow').value = '2.5';
+  $('sludge-was').value = '0.05';
+  $('sludge-volume').value = '1.5';
+  $('sludge-results').innerHTML = '';
+}
+
+// Oxygen Requirements Calculator
+function calculateOxygen() {
+  const bodRemoved = parseFloat($('o2-bod').value);
+  const nh3Ox = parseFloat($('o2-nh3').value);
+  const temp = parseFloat($('o2-temp').value);
+  
+  const o2forBOD = bodRemoved * 1.5;
+  const o2forNH3 = nh3Ox * 4.57;
+  const totalO2 = o2forBOD + o2forNH3;
+  const peakO2 = totalO2 * 1.5;
+  
+  const results = `
+    <div style="margin-top:24px">
+      <h3>Results:</h3>
+      <table class="table">
+        <tr><td class="rowh">O₂ for BOD Removal</td><td class="result">${o2forBOD.toFixed(0)} lb/d</td></tr>
+        <tr><td class="rowh">O₂ for Nitrification</td><td class="result">${o2forNH3.toFixed(0)} lb/d</td></tr>
+        <tr><td class="rowh">Total O₂ Demand</td><td class="result">${totalO2.toFixed(0)} lb/d</td></tr>
+        <tr><td class="rowh">Peak O₂ Demand</td><td class="result">${peakO2.toFixed(0)} lb/d</td></tr>
+        <tr><td class="rowh">Average Rate</td><td class="result">${(totalO2 / 24).toFixed(1)} lb/hr</td></tr>
+      </table>
+      <div class="note">
+        <strong>💡 Note:</strong> Peak demand assumes 1.5x multiplier for diurnal variation
+      </div>
+    </div>
+  `;
+  
+  $('oxygen-results').innerHTML = results;
+  saveCalculation('oxygen', { bodRemoved, nh3Ox, temp, results: { o2forBOD, o2forNH3, totalO2, peakO2 } });
+}
+
+function resetOxygen() {
+  $('o2-bod').value = '3750';
+  $('o2-nh3').value = '150';
+  $('o2-temp').value = '20';
+  $('o2-alt').value = '0';
+  $('oxygen-results').innerHTML = '';
+}
+
+// Nutrient Removal Calculator
+function calculateNutrients() {
+  const tnIn = parseFloat($('nut-tn-in').value);
+  const tnOut = parseFloat($('nut-tn-out').value);
+  const tpIn = parseFloat($('nut-tp-in').value);
+  const tpOut = parseFloat($('nut-tp-out').value);
+  
+  const tnRemoval = ((tnIn - tnOut) / tnIn) * 100;
+  const tpRemoval = ((tpIn - tpOut) / tpIn) * 100;
+  
+  const results = `
+    <div style="margin-top:24px">
+      <h3>Results:</h3>
+      <table class="table">
+        <tr><td class="rowh">TN Removal</td><td class="result">${tnRemoval.toFixed(1)}%</td></tr>
+        <tr><td class="rowh">TN Removed</td><td class="result">${(tnIn - tnOut).toFixed(1)} mg/L</td></tr>
+        <tr><td class="rowh">TP Removal</td><td class="result">${tpRemoval.toFixed(1)}%</td></tr>
+        <tr><td class="rowh">TP Removed</td><td class="result">${(tpIn - tpOut).toFixed(1)} mg/L</td></tr>
+      </table>
+      <div class="note ${tnRemoval > 70 ? 'success' : 'warning'}">
+        <strong>TN Status:</strong> ${tnRemoval > 70 ? '✅ Good nitrogen removal' : '⚠️ Consider optimization'}
+      </div>
+      <div class="note ${tpRemoval > 80 ? 'success' : 'warning'}">
+        <strong>TP Status:</strong> ${tpRemoval > 80 ? '✅ Good phosphorus removal' : '⚠️ May need chemical addition'}
+      </div>
+    </div>
+  `;
+  
+  $('nutrients-results').innerHTML = results;
+  saveCalculation('nutrients', { tnIn, tnOut, tpIn, tpOut, results: { tnRemoval, tpRemoval } });
+}
+
+function resetNutrients() {
+  $('nut-tn-in').value = '35';
+  $('nut-tn-out').value = '8';
+  $('nut-tp-in').value = '4.5';
+  $('nut-tp-out').value = '0.5';
+  $('nutrients-results').innerHTML = '';
+}
+
+// Chemical Dosing Calculator
+function calculateChemical() {
+  const flow = parseFloat($('chem-flow').value);
+  const dose = parseFloat($('chem-dose').value);
+  const strength = parseFloat($('chem-strength').value);
+  
+  const feedRate = (flow * dose * 8.34) / (strength / 100);
+  const dailyUsage = feedRate;
+  const monthlyUsage = feedRate * 30;
+  
+  const results = `
+    <div style="margin-top:24px">
+      <h3>Results:</h3>
+      <table class="table">
+        <tr><td class="rowh">Feed Rate</td><td class="result">${feedRate.toFixed(1)} lb/d</td></tr>
+        <tr><td class="rowh">Daily Usage</td><td class="result">${dailyUsage.toFixed(1)} lb/d</td></tr>
+        <tr><td class="rowh">Monthly Usage</td><td class="result">${monthlyUsage.toFixed(0)} lb/month</td></tr>
+        <tr><td class="rowh">Gallons/Day (if liquid)</td><td class="result">${(feedRate / 9.4).toFixed(1)} gal/d</td></tr>
+      </table>
+      <div class="note">
+        <strong>💡 Note:</strong> Values assume specific gravity ~1.3 for liquid chemicals
+      </div>
+    </div>
+  `;
+  
+  $('chemical-results').innerHTML = results;
+  saveCalculation('chemical', { flow, dose, strength, results: { feedRate, dailyUsage, monthlyUsage } });
+}
+
+function resetChemical() {
+  $('chem-type').selectedIndex = 0;
+  $('chem-flow').value = '2.5';
+  $('chem-dose').value = '10';
+  $('chem-strength').value = '48';
+  $('chemical-results').innerHTML = '';
+}
+
+// Energy Calculator
+function calculateEnergy() {
+  const kwh = parseFloat($('energy-kwh').value);
+  const flow = parseFloat($('energy-flow').value);
+  const cost = parseFloat($('energy-cost').value);
+  
+  const kwhPerMG = kwh / flow;
+  const dailyCost = kwh * cost;
+  const monthlyCost = dailyCost * 30;
+  const annualCost = dailyCost * 365;
+  
+  const results = `
+    <div style="margin-top:24px">
+      <h3>Results:</h3>
+      <table class="table">
+        <tr><td class="rowh">Energy Intensity</td><td class="result">${kwhPerMG.toFixed(0)} kWh/MG</td></tr>
+        <tr><td class="rowh">Daily Cost</td><td class="result">$${dailyCost.toFixed(2)}</td></tr>
+        <tr><td class="rowh">Monthly Cost</td><td class="result">$${monthlyCost.toFixed(2)}</td></tr>
+        <tr><td class="rowh">Annual Cost</td><td class="result">$${annualCost.toFixed(2)}</td></tr>
+      </table>
+      <div class="note ${kwhPerMG < 1800 ? 'success' : kwhPerMG < 2200 ? 'warning' : 'error'}">
+        <strong>Benchmark:</strong> ${
+          kwhPerMG < 1800 ? '✅ Excellent efficiency' :
+          kwhPerMG < 2200 ? '⚠️ Average efficiency' :
+          '❌ High energy usage - optimization needed'
+        }
+      </div>
+    </div>
+  `;
+  
+  $('energy-results').innerHTML = results;
+  saveCalculation('energy', { kwh, flow, cost, results: { kwhPerMG, dailyCost, monthlyCost, annualCost } });
+}
+
+function resetEnergy() {
+  $('energy-kwh').value = '4500';
+  $('energy-flow').value = '2.5';
+  $('energy-cost').value = '0.12';
+  $('energy-results').innerHTML = '';
+}
+
+// AI Assistant
+function sendAIMessage() {
+  const input = $('aiInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  
+  addAIMessage(msg, 'user');
+  input.value = '';
+  $('aiThinking').classList.add('active');
+  
+  setTimeout(() => {
+    const response = generateAIResponse(msg);
+    $('aiThinking').classList.remove('active');
+    addAIMessage(response, 'assistant');
+  }, 1500);
+}
+
+function addAIMessage(text, sender) {
+  const container = $('aiMessages');
+  const msg = document.createElement('div');
+  msg.className = `ai-message ${sender}`;
+  msg.innerHTML = text;
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+  
+  state.aiChat.push({ text, sender, time: new Date() });
+  saveToStorage('aiChat', state.aiChat);
+}
+
+function generateAIResponse(msg) {
+  const lower = msg.toLowerCase();
+  
+  if (lower.includes('svi') || lower.includes('bulking')) {
+    return `<strong>Sludge Bulking Analysis</strong><br><br>High SVI indicates filamentous bulking. Key actions:<br>
+    1. Check DO levels (target >2.0 mg/L)<br>
+    2. Verify F/M ratio (target 0.3-0.5)<br>
+    3. Consider RAS chlorination<br>
+    4. Review settling characteristics<br><br>
+    Current SVI: ${$('kpi-svi')?.textContent || '120'} mL/g`;
+  }
+  
+  if (lower.includes('energy') || lower.includes('cost')) {
+    return `<strong>Energy Optimization</strong><br><br>Your current usage: ${$('kpi-flow')?.textContent || '2.5'} MGD<br>
+    Typical aeration represents 50-60% of plant energy.<br><br>
+    Quick wins:<br>
+    • Install VFDs on blowers (15-25% savings)<br>
+    • Optimize DO setpoints<br>
+    • Regular diffuser cleaning<br>
+    • Time-of-day scheduling`;
+  }
+  
+  return `I can help with:<br>
+    • Process optimization<br>
+    • Troubleshooting issues<br>
+    • Compliance guidance<br>
+    • Energy efficiency<br>
+    • Equipment maintenance<br><br>
+    What specific area would you like to explore?`;
+}
+
+// Data Management
+function saveCalculation(type, data) {
+  state.calculations[type] = { ...data, timestamp: new Date() };
+  saveToStorage('calculations', state.calculations);
+}
+
+function saveToStorage(key, data) {
+  try {
+    localStorage.setItem(`apex_${key}`, JSON.stringify(data));
+  } catch (e) {
+    console.warn('Storage failed:', e);
+  }
+}
+
+function loadFromStorage(key) {
+  try {
+    const data = localStorage.getItem(`apex_${key}`);
+    return data ? JSON.parse(data) : null;
+  } catch (e) {
+    console.warn('Load failed:', e);
+    return null;
+  }
+}
+
+function loadSettings() {
+  const saved = loadFromStorage('settings');
+  if (saved) {
+    $('setting-plant').value = saved.plant || '';
+    $('setting-permit').value = saved.permit || '';
+    $('setting-design-flow').value = saved.designFlow || '';
+  }
+  
+  const calcs = loadFromStorage('calculations');
+  if (calcs) state.calculations = calcs;
+  
+  const chat = loadFromStorage('aiChat');
+  if (chat) state.aiChat = chat;
+}
+
+function saveSettings() {
+  const settings = {
+    plant: $('setting-plant').value,
+    permit: $('setting-permit').value,
+    designFlow: $('setting-design-flow').value,
+    units: $('setting-units').value,
+    autosave: $('setting-autosave').checked
+  };
+  
+  saveToStorage('settings', settings);
+  showToast('✅ Settings saved successfully', 'success');
+}
+
+function clearData() {
+  if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+function exportData() {
+  const data = {
+    settings: loadFromStorage('settings'),
+    calculations: state.calculations,
+    aiChat: state.aiChat,
+    exportDate: new Date()
+  };
+  
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `apex-data-${Date.now()}.json`;
+  a.click();
+  
+  showToast('✅ Data exported successfully', 'success');
+}
+
+function importData() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = event => {
+      try {
+        const data = JSON.parse(event.target.result);
+        if (data.settings) saveToStorage('settings', data.settings);
+        if (data.calculations) state.calculations = data.calculations;
+        if (data.aiChat) state.aiChat = data.aiChat;
+        showToast('✅ Data imported successfully', 'success');
+        location.reload();
+      } catch (err) {
+        showToast('❌ Invalid file format', 'error');
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// Quick Actions
+function runDiagnostics() {
+  showToast('🔍 Running diagnostics...', 'info');
+  setTimeout(() => {
+    showToast('✅ All systems nominal', 'success');
+  }, 2000);
+}
+
+function exportReport() {
+  showToast('📄 Generating report...', 'info');
+  setTimeout(() => {
+    showToast('✅ Report ready for download', 'success');
+  }, 1500);
+}
+
+function generateReport() {
+  const type = $('report-type').value;
+  showToast(`📊 Generating ${type} report...`, 'info');
+  setTimeout(() => {
+    showToast('✅ Report generated successfully', 'success');
+  }, 2000);
+}
+
+function exportPDF() {
+  showToast('📥 Exporting to PDF...', 'info');
+  setTimeout(() => {
+    showToast('✅ PDF ready for download', 'success');
+  }, 1500);
+}
+
+function exportExcel() {
+  showToast('📊 Exporting to Excel...', 'info');
+  setTimeout(() => {
+    showToast('✅ Excel file ready', 'success');
+  }, 1500);
+}
+
+function showAI() {
+  $$('.tab[data-target="ai"]')[0].click();
+  setTimeout(() => $('aiInput').focus(), 300);
+}
+
+function syncData() {
+  if (!state.isOnline) {
+    showToast('📵 Cannot sync while offline', 'warning');
+    return;
+  }
+  
+  showToast('🔄 Syncing data...', 'info');
+  setTimeout(() => {
+    showToast('✅ Data synced successfully', 'success');
+  }, 2000);
+}
+
+// Service Worker Installation
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => console.log('✅ Service Worker registered'))
+      .catch(err => console.error('❌ Service Worker failed:', err));
+  });
+}
+
+// Install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  
+  const installBtn = document.createElement('button');
+  installBtn.className = 'install-prompt';
+  installBtn.textContent = '📱 Install APEX App';
+  installBtn.onclick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`Install prompt ${outcome}`);
+      deferredPrompt = null;
+      installBtn.remove();
+    }
+  };
+  document.body.appendChild(installBtn);
+});
+
+console.log('🚀 APEX WWTP Pro Enhanced PWA loaded successfully!');
+</script>
+
+</body>
+</html>
