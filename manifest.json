@@ -1,102 +1,25 @@
 {
-  "name": "APEX WWTP Pro - Enhanced PWA",
-  "short_name": "APEX WWTP",
-  "description": "Advanced professional wastewater treatment plant analysis and operations platform with AI diagnostics",
+  "name": "WWTP Ultimate Integrated",
+  "short_name": "WWTP",
+  "description": "Advanced wastewater treatment plant analysis platform",
   "start_url": "/wwtp-app/",
   "scope": "/wwtp-app/",
   "display": "standalone",
   "orientation": "any",
   "theme_color": "#667eea",
   "background_color": "#1a202c",
-  "categories": ["utilities", "productivity", "business"],
-  "dir": "ltr",
   "icons": [
     {
-      "src": "/wwtp-app/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/wwtp-app/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/wwtp-app/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/wwtp-app/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/wwtp-app/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/wwtp-app/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/wwtp-app/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/wwtp-app/icons/icon-512x512.png",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect fill='%23667eea' width='512' height='512'/%3E%3Ctext x='256' y='350' text-anchor='middle' font-size='280' fill='white' font-family='Arial, sans-serif' font-weight='bold'%3EW%3C/text%3E%3C/svg%3E",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect fill='%23667eea' width='192' height='192'/%3E%3Ctext x='96' y='130' text-anchor='middle' font-size='100' fill='white' font-family='Arial, sans-serif' font-weight='bold'%3EW%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ],
-  "screenshots": [
-    {
-      "src": "/wwtp-app/screenshots/desktop-1.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/wwtp-app/screenshots/mobile-1.png",
-      "sizes": "540x720",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Dashboard",
-      "short_name": "Dashboard",
-      "description": "View main dashboard",
-      "url": "/wwtp-app/",
-      "icons": [{ "src": "/wwtp-app/icons/icon-192x192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "AI Assistant",
-      "short_name": "AI",
-      "description": "Open AI diagnostics assistant",
-      "url": "/wwtp-app/#ai-assistant",
-      "icons": [{ "src": "/wwtp-app/icons/icon-192x192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Calculators",
-      "short_name": "Calc",
-      "description": "Process calculators",
-      "url": "/wwtp-app/#calculators",
-      "icons": [{ "src": "/wwtp-app/icons/icon-192x192.png", "sizes": "192x192" }]
-    }
-  ],
-  "prefer_related_applications": false,
-  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7"
+  ]
 }
