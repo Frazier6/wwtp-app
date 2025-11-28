@@ -5,7 +5,7 @@
 <meta content="width=device-width, initial-scale=1" name="viewport">
 <title>WWTP Ultimate Integrated Edition</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<link rel="manifest" href="file:///C:/Users/jituf/Downloads/manifest.json">
+<link rel="manifest" href="/wwtp-app/manifest.json">
 <meta name="theme-color" content="#667eea">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -639,7 +639,7 @@ body{background:white;color:black}
 <meta name="keywords" content="WWTP,wastewater,AI,voice,digital-twin,apex">
 <meta name="version" content="6.0 ABSOLUTE APEX">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<link rel="manifest" href="manifest.json" id="pwa-manifest">
+<link rel="manifest" href="/wwtp-app/manifest.json" id="pwa-manifest">
 <meta name="theme-color" content="#FF6B6B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -5159,11 +5159,27 @@ function resetDosing() {
   $('al_pump_max').value = '40';
   $('al_stock_gal').value = '8000';
   
-  $$('#dosing .result').forEach(el => el.textContent = '-');
-  $$('#dosing .status').forEach(el => {
-    el.textContent = '-';
-    el.className = 'status';
-  });
+  // Clear Ferric results
+  $('r_fe_sol_wgt').textContent = '-';
+  $('r_fe_chem_feed').textContent = '-';
+  $('r_fe_gpd').textContent = '-';
+  $('r_fe_gph').textContent = '-';
+  $('r_fe_ml_min').textContent = '-';
+  $('r_fe_pump_pct').textContent = '-';
+  $('r_fe_days_left').textContent = '-';
+  if ($('s_fe_pump')) { $('s_fe_pump').textContent = '-'; $('s_fe_pump').className = 'status'; }
+  if ($('s_fe_stock')) { $('s_fe_stock').textContent = '-'; $('s_fe_stock').className = 'status'; }
+  
+  // Clear Alum results
+  $('r_al_sol_wgt').textContent = '-';
+  $('r_al_chem_feed').textContent = '-';
+  $('r_al_gpd').textContent = '-';
+  $('r_al_gph').textContent = '-';
+  $('r_al_ml_min').textContent = '-';
+  $('r_al_pump_pct').textContent = '-';
+  $('r_al_days_left').textContent = '-';
+  if ($('s_al_pump')) { $('s_al_pump').textContent = '-'; $('s_al_pump').className = 'status'; }
+  if ($('s_al_stock')) { $('s_al_stock').textContent = '-'; $('s_al_stock').className = 'status'; }
   
   showToast('Dosing reset', 'info');
 }
@@ -9178,7 +9194,7 @@ let pwaInstallButton;
 // Register Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
+    navigator.serviceWorker.register('/wwtp-app/service-worker.js')
       .then((registration) => {
         console.log('👑 APEX PWA: Service Worker registered!', registration.scope);
         
@@ -9380,7 +9396,7 @@ console.log('👑 APEX PWA: Installation script loaded');
 // PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('service-worker.js')
+    navigator.serviceWorker.register('/wwtp-app/service-worker.js')
       .then(registration => {
         console.log('✅ PWA: Service Worker registered successfully');
         console.log('✅ PWA: Offline mode enabled');
