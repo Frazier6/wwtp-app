@@ -1,18 +1,35 @@
-const CACHE_NAME = 'wwtp-v9.2.4';
-const urlsToCache = ['./', './index.html'];
+const CACHE_NAME = 'wwtp-v9.2.4-fix2';
+const PRECACHE_URLS = [
+  '/wwtp-app/',
+  '/wwtp-app/index.html',
+  '/wwtp-app/manifest.json',
+  '/wwtp-app/icons/icon-192x192.png',
+  '/wwtp-app/icons/icon-512x512.png'
+];
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
-  self.skipWaiting();
+// Install event - cache files
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(PRECACHE_URLS))
+      .then(() => self.skipWaiting())
+  );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(names => 
-    Promise.all(names.filter(n => n !== CACHE_NAME).map(n => caches.delete(n)))
-  ));
-  self.clients.claim();
+// Activate event - clean old caches
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+    )).then(() => self.clients.claim())
+  );
 });
 
-self.addEventListener('fetch', e => {
-  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+// Fetch event - serve from cache, fallback to network
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
+  );
 });
