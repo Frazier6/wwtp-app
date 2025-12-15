@@ -1,39 +1,26 @@
 {
-  "name": "WWTP Ultimate Integrated",
+  "name": "WWTP Command Center",
   "short_name": "WWTP",
-  "description": "Advanced wastewater treatment plant analysis platform",
-  "start_url": "/wwtp-app/",
-  "scope": "/wwtp-app/",
+  "description": "Professional wastewater treatment plant analysis platform",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "/wwtp/",
   "display": "standalone",
+  "background_color": "#023e8a",
+  "theme_color": "#023e8a",
   "orientation": "any",
-  "theme_color": "#667eea",
-  "background_color": "#1a202c",
   "icons": [
     {
-      "src": "/wwtp-app/icons/icon-192x192.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "/wwtp-app/icons/icon-512x512.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/wwtp-app/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/wwtp-app/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
+      "purpose": "any maskable"
     }
-  ],
-  "categories": ["utilities", "productivity"],
-  "prefer_related_applications": false
+  ]
 }
