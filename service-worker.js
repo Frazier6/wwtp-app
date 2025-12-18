@@ -1,35 +1,57 @@
-const CACHE_NAME = 'wwtp-v9.2.4-fix2';
-const PRECACHE_URLS = [
-  '/wwtp-app/',
-  '/wwtp-app/index.html',
-  '/wwtp-app/manifest.json',
-  '/wwtp-app/icons/icon-192x192.png',
-  '/wwtp-app/icons/icon-512x512.png'
+// WWTP Command Center v9.6.0 - Service Worker
+// Deploy this file alongside index.html for full offline support
+
+const CACHE_NAME = 'wwtp-v9.6.0';
+const OFFLINE_URLS = [
+  './',
+  './index.html'
 ];
 
-// Install event - cache files
-self.addEventListener('install', event => {
+// Install - cache critical resources
+self.addEventListener('install', (event) => {
+  console.log('[SW] Installing v9.6.0');
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(PRECACHE_URLS))
+      .then(cache => cache.addAll(OFFLINE_URLS))
       .then(() => self.skipWaiting())
   );
 });
 
-// Activate event - clean old caches
-self.addEventListener('activate', event => {
+// Activate - clean old caches
+self.addEventListener('activate', (event) => {
+  console.log('[SW] Activating v9.6.0');
   event.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-    )).then(() => self.clients.claim())
+    caches.keys().then(keys => 
+      Promise.all(
+        keys.filter(key => key !== CACHE_NAME)
+            .map(key => caches.delete(key))
+      )
+    ).then(() => self.clients.claim())
   );
 });
 
-// Fetch event - serve from cache, fallback to network
-self.addEventListener('fetch', event => {
+// Fetch - network first, fall back to cache
+self.addEventListener('fetch', (event) => {
+  // Only handle same-origin requests
+  if (!event.request.url.startsWith(self.location.origin)) return;
+  
   event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
+    fetch(event.request)
+      .then(response => {
+        // Cache successful responses
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
+});
+
+// Handle messages (for update prompts)
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
