@@ -4,7 +4,7 @@
 
 This package contains **TWO versions** of the APEX WWTP application:
 
-### 1. **WWTP-COMPLETE-PWA.html** (393KB) - ⭐ RECOMMENDED
+### 1. **WWTP-COMPLETE-PWA.html** (393KB) - ⭐ RECOMMENDE D
 **The FULL ULTIMATE VERSION with ALL features + PWA**
 
 This is your original "WWTP Ultimate Integrated Edition" with PWA capabilities added.
