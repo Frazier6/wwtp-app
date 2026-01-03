@@ -1,6 +1,6 @@
 # 💧 APEX WWTP - Complete PWA Package
 
-## 🎯 TWO VERSIONS INCLUDED
+## 🎯 TWO VERSIONS INCLUDE D
 
 This package contains **TWO versions** of the APEX WWTP application:
 
