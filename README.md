@@ -2,7 +2,7 @@
 
 ## 🎯 TWO VERSIONS INCLUDE D
 
-This package contains **TWO versions** of th e APEX WWTP application: 
+This package contains **TWO versions** of the APEX WWTP application: 
 
 ### 1. **WWTP-COMPLETE-PWA.html** (393KB) - ⭐ RECOMMENDE D
 **The FULL ULTIMATE VERSION with ALL features + PWA** 
