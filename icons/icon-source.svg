@@ -1,0 +1,232 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Premium dark background -->
+    <linearGradient id="bgGrad3E" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1b4b"/>
+      <stop offset="30%" style="stop-color:#0f172a"/>
+      <stop offset="100%" style="stop-color:#020617"/>
+    </linearGradient>
+    
+    <!-- Main droplet gradient - rich depth -->
+    <linearGradient id="dropGrad3E" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#93c5fd"/>
+      <stop offset="25%" style="stop-color:#60a5fa"/>
+      <stop offset="50%" style="stop-color:#3b82f6"/>
+      <stop offset="75%" style="stop-color:#6366f1"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+    
+    <!-- Glass highlight top -->
+    <linearGradient id="glassTop" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0.5)"/>
+      <stop offset="50%" style="stop-color:rgba(255,255,255,0.2)"/>
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
+    </linearGradient>
+    
+    <!-- Glass edge highlight -->
+    <linearGradient id="glassEdge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0.4)"/>
+      <stop offset="50%" style="stop-color:rgba(255,255,255,0.1)"/>
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
+    </linearGradient>
+    
+    <!-- Inner depth gradient -->
+    <radialGradient id="innerDepth" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#1e1b4b"/>
+      <stop offset="100%" style="stop-color:#020617"/>
+    </radialGradient>
+    
+    <!-- Core gradient - golden premium -->
+    <radialGradient id="coreGrad3E" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#ffffff"/>
+      <stop offset="20%" style="stop-color:#fef3c7"/>
+      <stop offset="45%" style="stop-color:#fbbf24"/>
+      <stop offset="70%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </radialGradient>
+    
+    <!-- Ring gradient -->
+    <linearGradient id="ringGrad3E" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c4b5fd"/>
+      <stop offset="50%" style="stop-color:#a78bfa"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+    
+    <!-- Premium glow -->
+    <filter id="premiumGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Strong core glow -->
+    <filter id="coreGlow3E" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="16" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Outer drop shadow -->
+    <filter id="dropShadow3E">
+      <feDropShadow dx="0" dy="10" stdDeviation="20" flood-color="#6366f1" flood-opacity="0.4"/>
+    </filter>
+    
+    <!-- Inner shadow for 3D effect -->
+    <filter id="innerShadow3E">
+      <feOffset dx="0" dy="4"/>
+      <feGaussianBlur stdDeviation="6"/>
+      <feComposite operator="out" in="SourceGraphic"/>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.4 0"/>
+      <feBlend in="SourceGraphic"/>
+    </filter>
+    
+    <!-- Clip path -->
+    <clipPath id="dropClip3E">
+      <path d="M256 78 
+               C256 78 370 192 370 290 
+               C370 356 320 408 256 408 
+               C192 408 142 356 142 290 
+               C142 192 256 78 256 78 Z"/>
+    </clipPath>
+  </defs>
+  
+  <!-- Background -->
+  <rect x="20" y="20" width="472" height="472" rx="90" ry="90" fill="url(#bgGrad3E)"/>
+  
+  <!-- Subtle background glow -->
+  <ellipse cx="256" cy="280" r="180" fill="#6366f1" opacity="0.08" filter="url(#premiumGlow)"/>
+  
+  <!-- Outer decorative ring -->
+  <g filter="url(#premiumGlow)" opacity="0.5">
+    <circle cx="256" cy="258" r="195" fill="none" stroke="url(#ringGrad3E)" stroke-width="2"/>
+    <circle cx="256" cy="258" r="188" fill="none" stroke="#8b5cf6" stroke-width="1" stroke-dasharray="8 6"/>
+  </g>
+  
+  <!-- Main Droplet with shadow -->
+  <g filter="url(#dropShadow3E)">
+    <!-- Main droplet body -->
+    <path d="M256 68 
+             C256 68 378 190 378 295 
+             C378 365 325 418 256 418 
+             C187 418 134 365 134 295 
+             C134 190 256 68 256 68 Z" 
+          fill="url(#dropGrad3E)"/>
+    
+    <!-- Inner edge highlight (3D rim) -->
+    <path d="M256 78 
+             C256 78 368 195 368 293 
+             C368 358 318 408 256 408 
+             C194 408 144 358 144 293 
+             C144 195 256 78 256 78 Z" 
+          fill="none" stroke="url(#glassEdge)" stroke-width="3"/>
+  </g>
+  
+  <!-- Inner dark area for depth -->
+  <path d="M256 105 
+           C256 105 348 205 348 285 
+           C348 340 305 385 256 385 
+           C207 385 164 340 164 285 
+           C164 205 256 105 256 105 Z" 
+        fill="url(#innerDepth)" filter="url(#innerShadow3E)"/>
+  
+  <!-- Glass highlight - top shine -->
+  <ellipse cx="200" cy="175" rx="55" ry="75" fill="url(#glassTop)" opacity="0.6"/>
+  
+  <!-- Secondary highlight -->
+  <ellipse cx="190" cy="155" rx="25" ry="40" fill="white" opacity="0.35"/>
+  
+  <!-- Small highlight dot -->
+  <circle cx="180" cy="140" r="8" fill="white" opacity="0.5"/>
+  
+  <!-- Premium hexagon grid -->
+  <g clip-path="url(#dropClip3E)">
+    <g stroke="#a5b4fc" stroke-width="1.5" fill="none" opacity="0.4">
+      <!-- Central cluster -->
+      <polygon points="256,175 275,187 275,211 256,223 237,211 237,187"/>
+      <polygon points="218,205 237,217 237,241 218,253 199,241 199,217"/>
+      <polygon points="294,205 313,217 313,241 294,253 275,241 275,217"/>
+      
+      <!-- Center hex - filled -->
+      <polygon points="256,235 275,247 275,271 256,283 237,271 237,247" 
+               fill="#1e1b4b" fill-opacity="0.5" stroke="#c4b5fd" stroke-width="2"/>
+      
+      <polygon points="218,265 237,277 237,301 218,313 199,301 199,277"/>
+      <polygon points="294,265 313,277 313,301 294,313 275,301 275,277"/>
+      <polygon points="256,295 275,307 275,331 256,343 237,331 237,307"/>
+      <polygon points="218,325 237,337 237,361 218,373 199,361 199,337"/>
+      <polygon points="294,325 313,337 313,361 294,373 275,361 275,337"/>
+    </g>
+  </g>
+  
+  <!-- Energy connections from core -->
+  <g stroke="#fbbf24" stroke-width="2.5" opacity="0.6" stroke-linecap="round" filter="url(#premiumGlow)">
+    <line x1="256" y1="265" x2="256" y2="195"/>
+    <line x1="256" y1="265" x2="200" y2="235"/>
+    <line x1="256" y1="265" x2="312" y2="235"/>
+    <line x1="256" y1="265" x2="200" y2="295"/>
+    <line x1="256" y1="265" x2="312" y2="295"/>
+    <line x1="256" y1="265" x2="256" y2="335"/>
+  </g>
+  
+  <!-- Data nodes - premium gold -->
+  <g filter="url(#premiumGlow)">
+    <circle cx="256" cy="200" r="6" fill="#fbbf24"/>
+    <circle cx="256" cy="200" r="3" fill="#fef3c7"/>
+    
+    <circle cx="203" cy="235" r="5" fill="#fbbf24"/>
+    <circle cx="203" cy="235" r="2.5" fill="#fef3c7"/>
+    
+    <circle cx="309" cy="235" r="5" fill="#fbbf24"/>
+    <circle cx="309" cy="235" r="2.5" fill="#fef3c7"/>
+    
+    <circle cx="203" cy="295" r="5" fill="#fbbf24"/>
+    <circle cx="203" cy="295" r="2.5" fill="#fef3c7"/>
+    
+    <circle cx="309" cy="295" r="5" fill="#fbbf24"/>
+    <circle cx="309" cy="295" r="2.5" fill="#fef3c7"/>
+    
+    <circle cx="256" cy="330" r="6" fill="#fbbf24"/>
+    <circle cx="256" cy="330" r="3" fill="#fef3c7"/>
+  </g>
+  
+  <!-- Central Core - Premium golden nexus -->
+  <g filter="url(#coreGlow3E)">
+    <!-- Outer glow ring -->
+    <circle cx="256" cy="265" r="50" fill="url(#coreGrad3E)" opacity="0.3"/>
+    
+    <!-- Main core glow -->
+    <circle cx="256" cy="265" r="38" fill="url(#coreGrad3E)" opacity="0.6"/>
+    
+    <!-- Core body -->
+    <circle cx="256" cy="265" r="28" fill="url(#coreGrad3E)"/>
+    
+    <!-- Inner bright -->
+    <circle cx="256" cy="265" r="18" fill="#fbbf24"/>
+    
+    <!-- Hot center -->
+    <circle cx="256" cy="265" r="10" fill="#fef3c7"/>
+    
+    <!-- White hot point -->
+    <circle cx="256" cy="265" r="5" fill="#ffffff"/>
+    
+    <!-- Highlight reflection -->
+    <circle cx="250" cy="258" r="5" fill="#ffffff" opacity="0.9"/>
+    <circle cx="248" cy="256" r="2" fill="#ffffff"/>
+  </g>
+  
+  <!-- Bottom reflection/shine -->
+  <ellipse cx="256" cy="390" rx="60" ry="12" fill="white" opacity="0.08"/>
+  
+  <!-- Premium corner accents -->
+  <g filter="url(#premiumGlow)">
+    <circle cx="90" cy="90" r="6" fill="#a78bfa" opacity="0.6"/>
+    <circle cx="422" cy="90" r="6" fill="#a78bfa" opacity="0.6"/>
+    <circle cx="90" cy="422" r="6" fill="#a78bfa" opacity="0.6"/>
+    <circle cx="422" cy="422" r="6" fill="#a78bfa" opacity="0.6"/>
+  </g>
+</svg>
