@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="384" height="384" viewBox="0 0 384 384">
+<defs>
+<linearGradient id="BG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b0c16"/><stop offset="100%" stop-color="#06080f"/></linearGradient>
+<linearGradient id="HX" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#38bdf8"/></linearGradient>
+<linearGradient id="NC" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a5b4fc"/><stop offset="100%" stop-color="#7dd3fc"/></linearGradient>
+</defs>
+<rect width="384" height="384" rx="87.97" fill="url(#BG)"/>
+<path d="M 328.05 178.2 Q 336.0 192.0 328.05 205.8 L 271.95 302.92 Q 264.0 316.73 248.02 316.73 L 135.98 316.73 Q 120.0 316.73 112.05 302.92 L 55.95 205.8 Q 48.0 192.0 55.95 178.2 L 112.05 81.07 Q 120.0 67.28 135.98 67.28 L 248.02 67.28 Q 264.0 67.28 271.95 81.07 Z" fill="#818cf808" stroke="url(#HX)" stroke-width="6.0"/>
+<ellipse cx="192.0" cy="192.0" rx="111.98" ry="39.97" fill="none" stroke="#38bdf8" stroke-width="6.0" opacity="0.60" transform="rotate(35 192.0 192.0)"/>
+<ellipse cx="192.0" cy="192.0" rx="111.98" ry="39.97" fill="none" stroke="#818cf8" stroke-width="8.02" opacity="0.90" transform="rotate(-35 192.0 192.0)"/>
+<circle cx="169.05" cy="159.23" r="12.0" fill="#818cf8"/>
+<circle cx="283.73" cy="256.2" r="9.98" fill="#38bdf8" opacity="0.85"/>
+<circle cx="192.0" cy="192.0" r="36.0" fill="#818cf8" opacity="0.12"/>
+<circle cx="192.0" cy="192.0" r="21.98" fill="url(#BG)"/>
+<circle cx="192.0" cy="192.0" r="15.98" fill="url(#NC)"/>
+</svg>

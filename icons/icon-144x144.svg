@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="144" viewBox="0 0 144 144">
+<defs>
+<linearGradient id="BG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b0c16"/><stop offset="100%" stop-color="#06080f"/></linearGradient>
+<linearGradient id="HX" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#38bdf8"/></linearGradient>
+<linearGradient id="NC" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#a5b4fc"/><stop offset="100%" stop-color="#7dd3fc"/></linearGradient>
+</defs>
+<rect width="144" height="144" rx="32.99" fill="url(#BG)"/>
+<path d="M 123.02 66.83 Q 126.0 72.0 123.02 77.17 L 101.98 113.6 Q 99.0 118.77 93.01 118.77 L 50.99 118.77 Q 45.0 118.77 42.02 113.6 L 20.98 77.17 Q 18.0 72.0 20.98 66.83 L 42.02 30.4 Q 45.0 25.23 50.99 25.23 L 93.01 25.23 Q 99.0 25.23 101.98 30.4 Z" fill="#818cf808" stroke="url(#HX)" stroke-width="2.25"/>
+<ellipse cx="72.0" cy="72.0" rx="41.99" ry="14.99" fill="none" stroke="#38bdf8" stroke-width="2.25" opacity="0.60" transform="rotate(35 72.0 72.0)"/>
+<ellipse cx="72.0" cy="72.0" rx="41.99" ry="14.99" fill="none" stroke="#818cf8" stroke-width="3.01" opacity="0.90" transform="rotate(-35 72.0 72.0)"/>
+<circle cx="63.39" cy="59.71" r="4.5" fill="#818cf8"/>
+<circle cx="106.4" cy="96.08" r="3.74" fill="#38bdf8" opacity="0.85"/>
+<circle cx="72.0" cy="72.0" r="13.5" fill="#818cf8" opacity="0.12"/>
+<circle cx="72.0" cy="72.0" r="8.24" fill="url(#BG)"/>
+<circle cx="72.0" cy="72.0" r="5.99" fill="url(#NC)"/>
+</svg>
