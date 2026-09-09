@@ -1,0 +1,12 @@
+{
+  "version": "15.2.21",
+  "name": "Extended Aeration Plant Type",
+  "date": "2026-09-09",
+  "file": "WWTP-Command-Center-v15.2.21.html",
+  "changes": [
+    "Extended Aeration split out as its own plant type in the startup onboarding wizard (previously bundled under Activated Sludge)",
+    "Extended Aeration added to Plant Information settings dropdown, matching onboarding",
+    "Selecting Extended Aeration in startup setup seeds Target SRT (25 d) and Target MLSS (4,000 mg/L) into Plant Config",
+    "RAS/WAS Advisor shows a contextual Extended Aeration guidance banner (low WAS, low sludge production) when that plant type is set"
+  ]
+}
